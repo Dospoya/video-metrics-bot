@@ -1,6 +1,7 @@
 import asyncio
 import json
 import pathlib
+from datetime import datetime
 
 import asyncpg
 
@@ -15,14 +16,14 @@ FILE_PATH = BASE_DIR / FILE_NAME
 def _mapping_video(item: dict) -> tuple[dict, list[dict]]:
     video = {
         "id": item["id"],
-        "video_created_at": item["video_created_at"],
+        "video_created_at": parse_ts(item["video_created_at"]),
         "views_count": item["views_count"],
         "likes_count": item["likes_count"],
         "reports_count": item["reports_count"],
         "comments_count": item["comments_count"],
         "creator_id": item["creator_id"],
-        "created_at": item["created_at"],
-        "updated_at": item["updated_at"],
+        "created_at": parse_ts(item["created_at"]),
+        "updated_at": parse_ts(item["updated_at"]),
     }
     snapshots = item.get("snapshots", [])
     return video, snapshots
@@ -40,8 +41,8 @@ def _mapping_snapshot(snapshot: dict) -> tuple:
         snapshot["delta_likes_count"],
         snapshot["delta_comments_count"],
         snapshot["delta_reports_count"],
-        snapshot["created_at"],
-        snapshot["updated_at"],
+        parse_ts(snapshot["created_at"]),
+        parse_ts(snapshot["updated_at"]),
     )
 
 
@@ -83,6 +84,10 @@ async def save_snapshots_batch(
         """,
         snapshot_data,
     )
+
+
+def parse_ts(ts) -> datetime:
+    return datetime.fromisoformat(ts)
 
 
 async def load_json(pool: asyncpg.Pool):
