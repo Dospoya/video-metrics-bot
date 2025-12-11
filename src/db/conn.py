@@ -1,11 +1,8 @@
-import os
-
 import asyncpg
-from dotenv import load_dotenv
 
-_ = load_dotenv(".env")
+from src.config.config import settings
 
-DATABASE_URL = os.getenv("DATABASE_URL", "")
+DATABASE_URL = settings.database_url
 
 pool: None | asyncpg.Pool = None
 
