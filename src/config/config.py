@@ -11,5 +11,7 @@ class Settings(BaseSettings):
 
     openai_api_key: str = "openai_api_key"
 
+    bot_token: str = "bot_token"
+
 
 settings = Settings()

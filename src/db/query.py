@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date
 
 import asyncpg
 
@@ -11,7 +11,7 @@ async def total_videos(pool: asyncpg.Pool) -> int:
 
 
 async def creator_videos_in_period(
-    pool: asyncpg.Pool, creator_id, start_date: datetime, end_date: datetime
+    pool: asyncpg.Pool, creator_id, start_date: date, end_date: date
 ) -> int:
     async with pool.acquire() as conn:
         return await conn.fetchval(
@@ -36,12 +36,12 @@ async def videos_over_views(pool: asyncpg.Pool, views: int) -> int:
         )
 
 
-async def views_growth_on_date(pool: asyncpg.Pool, dt: datetime) -> int:
+async def views_growth_on_date(pool: asyncpg.Pool, on_date: date) -> int:
     async with pool.acquire() as conn:
         return await conn.fetchval(
             """
             SELECT SUM(delta_views_count) FROM video_snapshot
             WHERE created_at::date = $1
         """,
-            dt,
+            on_date,
         )
