@@ -98,15 +98,37 @@
    - params:
        - date: дата в формате YYYY-MM-DD
 
+5) videos_with_growth_on_date
+    Описание:
+    - Подсчёт количества РАЗНЫХ видео, которые получили новые просмотры в указанный календарный день.
+    Как интерпретировать:
+    - Вопросы вида:
+      «Сколько разных видео получали новые просмотры 27 ноября 2025?»
+      «Сколько видео получали новые просмотры 2025-11-27?»
+      «У скольких роликов был прирост просмотров 27.11.2025?»
+      «Сколько роликов имели новые просмотры за день 27 ноября 2025?»
+    Важные моменты:
+    - Используется ТОЛЬКО таблица video_snapshots.
+    - Признак “получали новые просмотры” = delta_views_count > 0.
+    - Считается количество уникальных video_id за день.
+    - Это НЕ сумма прироста (это другой intent views_growth_on_date).
+        - views_growth_on_date = “на сколько в сумме выросли просмотры” → суммируем delta_views_count
+        - videos_with_growth_on_date = “сколько разных видео получили новые просмотры” → считаем уникальные video_id
+    Поля:
+    - intent = "videos_with_growth_on_date"
+    - params:
+      - date: дата в формате YYYY-MM-DD
+
 ФОРМАТ ОТВЕТА:
 - ВСЕГДА возвращай ОДИН объект Query.
 - Поле intent ОБЯЗАТЕЛЬНО и должно быть одним из:
-  "total_videos", "creator_videos_in_period", "videos_over_views", "views_growth_on_date".
+  "total_videos", "creator_videos_in_period", "videos_over_views", "views_growth_on_date", "videos_with_growth_on_date"
 - Поле params ДОЛЖНО соответствовать схеме для выбранного intent:
   - Для total_videos: пустой объект {}.
   - Для creator_videos_in_period: creator_id + start_date + end_date.
   - Для videos_over_views: views.
   - Для views_growth_on_date: date.
+  - Для videos_with_growth_on_date: date.
 - Никакого дополнительного текста, комментариев или пояснений вне структуры — только JSON, совместимый с Pydantic-моделью Query.
 
 ПРИМЕРЫ:
@@ -148,6 +170,16 @@
   "intent": "views_growth_on_date",
   "params": {
     "date": "2025-11-28"
+  }
+}
+
+Пример 5.
+Вопрос: «Сколько разных видео получали новые просмотры 27 ноября 2025?»
+Ответ:
+{
+  "intent": "videos_with_growth_on_date",
+  "params": {
+    "date": "2025-11-27"
   }
 }
 </system_prompt>

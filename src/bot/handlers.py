@@ -17,7 +17,7 @@ async def handle_question(message: types.Message, pool: asyncpg.Pool):
     try:
         query = converter(message.text)
     except Exception as e:
-        _ = await message.answer(f"Неподдерживаемый запрос. {repr(e)}")
+        _ = await message.answer(f"Неподдерживаемый запрос.")
     else:
         result = await execute_query(query, pool)
         _ = await message.answer(str(result))

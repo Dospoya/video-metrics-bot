@@ -1,7 +1,7 @@
 from datetime import date
-from typing import Annotated, Literal
+from typing import Literal
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 
 class EmptyParams(BaseModel):
@@ -12,6 +12,10 @@ class CreatorVideosInPeriodParams(BaseModel):
     creator_id: str
     start_date: date
     end_date: date
+
+
+class VideosWithGrowthOnDateParams(BaseModel):
+    on_date: date
 
 
 class VideosOverViewsQueryParams(BaseModel):
@@ -25,6 +29,11 @@ class ViewsGrowthOnDateParams(BaseModel):
 class TotalVideosQuery(BaseModel):
     intent: Literal["total_videos"]
     params: EmptyParams
+
+
+class VideosWithGrowthOnDateQuery(BaseModel):
+    intent: Literal["videos_with_growth_on_date"]
+    params: VideosWithGrowthOnDateParams
 
 
 class CreatorVideosInPeriodQuery(BaseModel):
@@ -48,4 +57,5 @@ class Query(BaseModel):
         | CreatorVideosInPeriodQuery
         | VideosOverViewsQuery
         | ViewsGrowthOnDateQuery
+        | VideosWithGrowthOnDateQuery
     )

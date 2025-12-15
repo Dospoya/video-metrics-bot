@@ -2,8 +2,6 @@ from datetime import date
 
 import asyncpg
 
-# «Сколько разных видео получали новые просмотры 27 ноября 2025?»
-
 
 async def total_videos(pool: asyncpg.Pool) -> int:
     async with pool.acquire() as conn:
@@ -43,5 +41,17 @@ async def views_growth_on_date(pool: asyncpg.Pool, on_date: date) -> int:
             SELECT SUM(delta_views_count) FROM video_snapshot
             WHERE created_at::date = $1
         """,
+            on_date,
+        )
+
+
+async def videos_with_growth_on_date(pool: asyncpg.Pool, on_date: date) -> int:
+    async with pool.acquire() as conn:
+        return await conn.fetchval(
+            """
+            SELECT COUNT(distinct video_id) FROM video_snapshots
+            WHERE created_at::date = $1
+                and delta_views_count > 0
+            """,
             on_date,
         )

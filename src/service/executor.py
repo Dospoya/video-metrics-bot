@@ -4,6 +4,7 @@ from src.db.query import (
     creator_videos_in_period,
     total_videos,
     videos_over_views,
+    videos_with_growth_on_date,
     views_growth_on_date,
 )
 from src.schemas.intent import Query
@@ -23,3 +24,5 @@ async def execute_query(query: Query, pool: asyncpg.Pool):
             return await videos_over_views(pool, q.params.views)
         case "views_growth_on_date":
             return await views_growth_on_date(pool, q.params.on_date)
+        case "videos_with_growth_on_date":
+            return await videos_with_growth_on_date(pool, q.params.on_date)
