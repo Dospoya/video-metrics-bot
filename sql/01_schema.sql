@@ -8,7 +8,7 @@ CREATE TABLE videos(
     reports_count INTEGER NOT NULL,
     created_at TIMESTAMPTZ NOT NULL,
     updated_at TIMESTAMPTZ NOT NULL
-)
+);
 
 CREATE INDEX idx_videos_creator_id ON videos(creator_id);
 
@@ -26,6 +26,6 @@ CREATE TABLE video_snapshots(
     delta_reports_count INTEGER NOT NULL,
     created_at TIMESTAMPTZ NOT NULL,
     updated_at TIMESTAMPTZ NOT NULL
-)
+);
 
 CREATE INDEX idx_video_snapshots_video_id ON video_snapshots(video_id);
