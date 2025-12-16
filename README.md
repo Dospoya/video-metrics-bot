@@ -31,6 +31,7 @@ POSTGRES_DB=videometricsbot
 DATABASE_URL=postgres://user:pass@localhost:5432/videometricsbot
 BOT_TOKEN=YOUR_TELEGRAM_BOT_TOKEN
 OPENAI_API_KEY=YOUR_OPENAI_API_KEY
+```
 
 
 ## 3) Запуск базы данных
